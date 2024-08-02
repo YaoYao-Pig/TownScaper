@@ -41,14 +41,25 @@ public class GridManager : MonoBehaviour
     {
         if (grid != null)
         {
-            
+            if (maxYHeight == 1)
+            {
+                foreach (var sq in grid.subQuadList)
+                {
+                    Gizmos.DrawLine(sq.a.currentWorldPosition, sq.b.currentWorldPosition);
+                    Gizmos.DrawLine(sq.b.currentWorldPosition, sq.c.currentWorldPosition);
+                    Gizmos.DrawLine(sq.c.currentWorldPosition, sq.d.currentWorldPosition);
+                    Gizmos.DrawLine(sq.d.currentWorldPosition, sq.a.currentWorldPosition);
+
+
+                }
+            }
             foreach (var vc in grid.cubeVertexList)
             {
                 if (vc.isActive == false)
                     Gizmos.color = Color.gray;
                 else
                     Gizmos.color = Color.red;
-                Gizmos.DrawSphere(vc.worldPosition,0.1f);
+                Gizmos.DrawSphere(vc.worldPosition,0.2f);
 
             }
             

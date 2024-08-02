@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eca9d3349d82434fa84465cb9450f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRadius: 5
+  maxRadius: 3
   cellSize: 3
   relaxTimes: 10
   maxYHeight: 5

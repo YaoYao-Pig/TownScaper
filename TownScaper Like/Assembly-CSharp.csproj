@@ -64,6 +64,9 @@
     <Compile Include="Assets\Scripts\HexGrid\Triangle.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Grid.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Quad.cs" />
+    <Compile Include="Assets\Scripts\Module\Module.cs" />
+    <Compile Include="Assets\Scripts\Module\ModuleLibrary.cs" />
+    <Compile Include="Assets\Scripts\Module\Slot.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

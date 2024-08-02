@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -7,69 +8,70 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int maxRadius;
     [SerializeField] private float cellSize;
     [SerializeField] private int relaxTimes;
+    [SerializeField] private int maxYHeight;
+    public Transform activeBall;
+    public Transform deactiveBall;
     private Grid grid;
     void Awake()
     {
-        grid = new Grid(maxRadius,cellSize, relaxTimes);
+        grid = new Grid(maxRadius,cellSize, relaxTimes, maxYHeight);
 
+    }
+    private void Update()
+    {
+        foreach (var vc in grid.cubeVertexList)
+        {
+            if (vc.isActive && Vector3.Distance(vc.worldPosition, deactiveBall.position)<2f)
+            {
+                vc.isActive = false;
+            }
+            else if(!vc.isActive && Vector3.Distance(vc.worldPosition, activeBall.position) < 2f)
+            {
+                vc.isActive = true;
+            }
+        }
+        
+        foreach(var qc in grid.cubeQuadList)
+        {
+            CubeQuad.UpdateBit(qc);
+        }
     }
 
     private void OnDrawGizmos()
     {
         if (grid != null)
         {
-            /*            Gizmos.color = Color.red;
-                        foreach (var vertex in grid.vertexList)
-                        {
-                            Gizmos.DrawSphere(vertex.initeWorldPosition, 0.5f);
-                        }*/
-            /*            Gizmos.color = Color.white;
-                        foreach (var e in Grid.edgeList)
-                        {
-                            Gizmos.DrawLine(e.a.initeWorldPosition,e.b.initeWorldPosition);
-                        }*/
-
-            /*            Gizmos.color = Color.blue;
-                        foreach (var q in grid.quadList)
-                        {
-                            Gizmos.DrawLine(q.a.initeWorldPosition, q.b.initeWorldPosition);
-                            Gizmos.DrawLine(q.b.initeWorldPosition, q.c.initeWorldPosition);
-                            Gizmos.DrawLine(q.c.initeWorldPosition, q.d.initeWorldPosition);
-                            Gizmos.DrawLine(q.d.initeWorldPosition, q.a.initeWorldPosition);
-                        }*/
-/*            Gizmos.color = Color.gray;
-            foreach (var t in grid.triangleList)
+            
+            foreach (var vc in grid.cubeVertexList)
             {
-                Gizmos.DrawLine(t.a.initeWorldPosition, t.b.initeWorldPosition);
-                Gizmos.DrawLine(t.b.initeWorldPosition, t.c.initeWorldPosition);
-                Gizmos.DrawLine(t.c.initeWorldPosition, t.a.initeWorldPosition);
-                Gizmos.DrawSphere(t.ab.midVertex.initeWorldPosition, 0.1f);
-                Gizmos.DrawSphere(t.bc.midVertex.initeWorldPosition, 0.1f);
-                Gizmos.DrawSphere(t.ca.midVertex.initeWorldPosition, 0.1f);
-            }
-
-            Gizmos.color = Color.white;
-            foreach (var v in Grid.midVertexList)
-            {
-                Gizmos.DrawSphere(v.initeWorldPosition, 0.1f);
+                if (vc.isActive == false)
+                    Gizmos.color = Color.gray;
+                else
+                    Gizmos.color = Color.red;
+                Gizmos.DrawSphere(vc.worldPosition,0.1f);
 
             }
-
-            Gizmos.color = Color.black;
-            foreach (var v in Grid.centerVertexList)
+            
+            foreach (var qc in grid.cubeQuadList)
             {
-                Gizmos.DrawSphere(v.initeWorldPosition, 0.1f);
+                Gizmos.color = Color.white;
+                Gizmos.DrawLine(qc.cubeVertexList[0].worldPosition, qc.cubeVertexList[1].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[1].worldPosition, qc.cubeVertexList[2].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[2].worldPosition, qc.cubeVertexList[3].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[3].worldPosition, qc.cubeVertexList[0].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[4].worldPosition, qc.cubeVertexList[5].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[5].worldPosition, qc.cubeVertexList[6].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[6].worldPosition, qc.cubeVertexList[7].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[7].worldPosition, qc.cubeVertexList[4].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[0].worldPosition, qc.cubeVertexList[4].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[1].worldPosition, qc.cubeVertexList[5].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[2].worldPosition, qc.cubeVertexList[6].worldPosition);
+                Gizmos.DrawLine(qc.cubeVertexList[3].worldPosition, qc.cubeVertexList[7].worldPosition);
+                //Gizmos.color = Color.blue;
+                //Gizmos.DrawSphere(qc.centerPosition, 0.1f);
 
-            }*/
-
-            Gizmos.color = Color.yellow;
-            foreach (var sq in grid.subQuadList)
-            {
-                Gizmos.DrawLine(sq.a.currentWorldPosition, sq.b.currentWorldPosition);
-                Gizmos.DrawLine(sq.b.currentWorldPosition, sq.c.currentWorldPosition);
-                Gizmos.DrawLine(sq.c.currentWorldPosition, sq.d.currentWorldPosition);
-                Gizmos.DrawLine(sq.d.currentWorldPosition, sq.a.currentWorldPosition);
-
+                GUI.color = Color.black;
+                Handles.Label(qc.centerPosition, qc.bits);
             }
 
         }

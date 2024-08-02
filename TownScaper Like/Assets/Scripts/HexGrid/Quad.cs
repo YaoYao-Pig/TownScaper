@@ -17,6 +17,8 @@ public class Quad : Shape
 
     private static int globalId = 0;
 
+    public List<CubeQuad> yQuadList = new List<CubeQuad>();
+
     private List<Vertex> SortEdge(Vertex _a, Vertex _b, Vertex _c,Vertex _d)
     {
         //根据x和z坐标排序
@@ -133,5 +135,48 @@ public class Quad : Shape
         c.offset += (vectorNew_c - c.currentWorldPosition) * 0.1f;
         d.offset += (vectorNew_d - d.currentWorldPosition) * 0.1f;
 
+    }
+}
+
+public class CubeQuad
+{
+    public CubeVertex[] cubeVertexList = new CubeVertex[8];
+
+    public string bits="";
+
+    public Vector3 centerPosition = Vector3.zero;
+    public CubeQuad(Quad _q,int _y)
+    {
+        if (_y >= Grid.maxY) throw new System.Exception("CubeQuad::CubeQuad -> _y should less than maxY");
+        cubeVertexList[0] = _q.a.yVertexList[_y + 1];
+        cubeVertexList[1] = _q.b.yVertexList[_y + 1];
+        cubeVertexList[2] = _q.c.yVertexList[_y + 1];
+        cubeVertexList[3] = _q.d.yVertexList[_y + 1];
+        cubeVertexList[4] = _q.a.yVertexList[_y];
+        cubeVertexList[5] = _q.b.yVertexList[_y];
+        cubeVertexList[6] = _q.c.yVertexList[_y];
+        cubeVertexList[7] = _q.d.yVertexList[_y];
+
+
+        foreach(var v in cubeVertexList)
+        {
+            centerPosition += v.worldPosition;
+        }
+
+        centerPosition /= 8;
+        
+    }
+    public static void UpdateBit(CubeQuad _c)
+    {
+        _c.bits = "";
+        for(int i = 0; i < 8; ++i)
+        {
+            char tmp = '0';
+            if (_c.cubeVertexList[i].isActive)
+            {
+                tmp = '1';
+            }
+            _c.bits += tmp;
+        }
     }
 }

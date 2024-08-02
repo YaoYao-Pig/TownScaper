@@ -5,6 +5,7 @@ using UnityEngine;
 public class Grid 
 {
     public static float cellSize;
+    public static int maxY;
 
 
     //hex顶点
@@ -25,11 +26,16 @@ public class Grid
     public static List<Vertex> midVertexList = new List<Vertex>();
     public static List<Vertex> centerVertexList = new List<Vertex>();
 
+    public List<CubeVertex> cubeVertexList = new List<CubeVertex>();
+    public List<CubeQuad> cubeQuadList = new List<CubeQuad>();
 
-    public Grid(int _maxRadius,float _cellsize,int _relaxTimes)
+    public List<Vertex> subQuadVertexList= new List<Vertex>();
+
+    public Grid(int _maxRadius,float _cellsize,int _relaxTimes,int _maxY)
     {
 
         cellSize = _cellsize;
+        maxY = _maxY;
         hexList.AddRange(GenerateHexVertex(_maxRadius));
         
         vertexList.AddRange(hexList);
@@ -37,28 +43,43 @@ public class Grid
         triangleList.AddRange(GenerateTriangle(_maxRadius));
 
         //Debug.Log(edgeList.Count);
+        
         GenerateTriangle();
-
+        vertexList.AddRange(midVertexList);
+        vertexList.AddRange(centerVertexList);
         DivideSubQuad();
 
 
-        vertexList.AddRange(midVertexList);
-        vertexList.AddRange(centerVertexList);
-/*
-        foreach(var e in vertexList)
-        {
-            if(Mathf.Abs(e.initeWorldPosition.x-e.currentWorldPosition.x)>0.01||
-                Mathf.Abs(e.initeWorldPosition.y - e.currentWorldPosition.y) > 0.01||
-                Mathf.Abs(e.initeWorldPosition.z - e.currentWorldPosition.z) > 0.01)
-            {
-                Debug.Log("Roor");
-            }
-        }*/
+        
+        
+
         RelaxSubQuad(_relaxTimes);
 
+
+        subQuadVertexList = GetAllSubQudList();
+
+        GenerateCubeVertex(maxY);
+
+        GenerateCube(maxY);
     }
 
-
+    public List<Vertex> GetAllSubQudList()
+    {
+        HashSet<Vertex> subQuadVertexHashSet = new HashSet<Vertex>();
+        List<Vertex> result = new List<Vertex>();
+        foreach (var sq in subQuadList)
+        {
+            subQuadVertexHashSet.Add(sq.a);
+            subQuadVertexHashSet.Add(sq.b);
+            subQuadVertexHashSet.Add(sq.c);
+            subQuadVertexHashSet.Add(sq.d);
+        }
+        foreach(var v in subQuadVertexHashSet)
+        {
+            result.Add(v);
+        }
+        return result;
+    }
 
     //1.生成Hex顶点
     private List<Vertex> GenerateHexVertex(int _maxRadius)
@@ -94,12 +115,6 @@ public class Grid
     }
 
 
-    private void SortEdge(Edge _e)
-    {
-        Vertex a = _e.a;
-        Vertex b = _e.b;
-
-    }
     //判断边是否已经存在了，
     //  如果存在，那么存在的边的owners+1，把存在的边返回
     //  如果不存在，那么新建一个边，owners+1,返回新建的边
@@ -239,6 +254,33 @@ public class Grid
         foreach (var v in vertexList)
         {
             v.Relax();
+        }
+    }
+
+    //5.生成三维空间点
+    void GenerateCubeVertex(int _maxY)
+    {
+        foreach(var v in subQuadVertexList)
+        {
+            for(int i = 0; i < _maxY; ++i)
+            {
+                CubeVertex vc = new CubeVertex(v, i);
+                cubeVertexList.Add(vc);
+                v.yVertexList.Add(vc);
+            }
+        }
+    }
+
+    public void GenerateCube(int _maxY)
+    {
+        foreach(var sq in subQuadList)
+        {
+            for(int i = 0; i < _maxY-1; ++i)
+            {
+                CubeQuad cq = new CubeQuad(sq, i);
+                cubeQuadList.Add(cq);
+                sq.yQuadList.Add(cq);
+            }
         }
     }
 }

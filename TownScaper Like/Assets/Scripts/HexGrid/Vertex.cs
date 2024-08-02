@@ -8,6 +8,7 @@ public class Vertex
     public Vector3 initeWorldPosition;
     public Vector3 currentWorldPosition;
     public Vector3 offset = Vector3.zero;
+    public List<CubeVertex> yVertexList = new List<CubeVertex>();
     public void Relax()
     {
         currentWorldPosition=initeWorldPosition+offset;
@@ -84,5 +85,18 @@ public class Vertex
     public static bool operator !=(Vertex _a, Vertex _b)
     {
         return !_a.coord.Equals(_b.coord);
+    }
+}
+
+public class CubeVertex
+{
+    public Vector3 worldPosition;
+    public bool isActive;
+    
+    
+    public CubeVertex(Vertex _v,int y)
+    {
+        isActive = false;
+        worldPosition = _v.currentWorldPosition + Vector3.up * (Grid.cellSize * y);
     }
 }

@@ -6,6 +6,7 @@ public class Grid
 {
     public static float cellSize;
     public static int maxY;
+    public static float cellHeight;
 
 
     //hex¶¥µã
@@ -17,6 +18,7 @@ public class Grid
     public List<Triangle> triangleList = new List<Triangle>();
 
     public static List<Edge> edgeList = new List<Edge>();
+   
 
     public List<Quad> quadList = new List<Quad>();
 
@@ -31,11 +33,11 @@ public class Grid
 
     public List<Vertex> subQuadVertexList= new List<Vertex>();
 
-    public Grid(int _maxRadius,float _cellsize,int _relaxTimes,int _maxY)
+    public Grid(int _maxRadius,float _cellsize,int _relaxTimes,int _maxY,float _cellHeight)
     {
 
         cellSize = _cellsize;
-        maxY = _maxY;
+        maxY = _maxY; cellHeight = _cellHeight;
         hexList.AddRange(GenerateHexVertex(_maxRadius));
         
         vertexList.AddRange(hexList);

@@ -68,10 +68,10 @@ public class Slot : MonoBehaviour
         Quad quad = _cubeQuad.quad;
         for(int i = 0; i < vertexs.Length; ++i)
         {
-            Vector3 ad_x = Vector3.Lerp(quad.a.currentWorldPosition, quad.d.currentWorldPosition,(vertexs[i].x+0.5f)/1);
-            Vector3 bc_x = Vector3.Lerp(quad.b.currentWorldPosition, quad.c.currentWorldPosition, (vertexs[i].x + 0.5f)/1);
-            vertexs[i] = Vector3.Lerp(ad_x, bc_x, (vertexs[i].z + 0.5f)/1)
-                        + Vector3.up * vertexs[i].y * Grid.maxY - quad.centerVertex.currentWorldPosition;//这里还有疑问
+            Vector3 ad_x = Vector3.Lerp(quad.a.currentWorldPosition, quad.d.currentWorldPosition,(vertexs[i].x+0.5f));
+            Vector3 bc_x = Vector3.Lerp(quad.b.currentWorldPosition, quad.c.currentWorldPosition, (vertexs[i].x + 0.5f));
+            vertexs[i] = Vector3.Lerp(ad_x, bc_x, (vertexs[i].z + 0.5f))
+                        + Vector3.up * vertexs[i].y * Grid.cellHeight - quad.centerVertex.currentWorldPosition;//这里还有疑问
         }
         _mesh.vertices = vertexs;
     }

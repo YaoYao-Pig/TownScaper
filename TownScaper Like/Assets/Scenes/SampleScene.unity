@@ -341,7 +341,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 906600614}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.22}
+  m_LocalPosition: {x: -0.647, y: -0.19, z: 3.596}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -525,11 +525,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxRadius: 5
-  cellSize: 0.5
+  cellSize: 1
   relaxTimes: 10
   maxYHeight: 5
   moduleLibrary: {fileID: 11400000, guid: 5f1b6fd74875a9d479e9c8503481da48, type: 2}
   moduleMaterial: {fileID: 2100000, guid: 6936f5502618b7847b501b77a679a300, type: 2}
+  cellHeight: 1
   activeBall: {fileID: 906600615}
   deactiveBall: {fileID: 642023047}
 --- !u!4 &2100318556

@@ -11,12 +11,13 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int maxYHeight;
     [SerializeField] private ModuleLibrary moduleLibrary;
     [SerializeField] private Material moduleMaterial;
+    [SerializeField] private float cellHeight;
     public Transform activeBall;
     public Transform deactiveBall;
     private Grid grid;
     void Awake()
     {
-        grid = new Grid(maxRadius,cellSize, relaxTimes, maxYHeight);
+        grid = new Grid(maxRadius,cellSize, relaxTimes, maxYHeight, cellHeight);
         moduleLibrary=Instantiate(moduleLibrary);
 
     }

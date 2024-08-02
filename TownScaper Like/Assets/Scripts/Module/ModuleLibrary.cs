@@ -26,7 +26,7 @@ public class ModuleLibrary : ScriptableObject
         //µº»Î
         foreach(Transform child in allMoudles.transform)
         {
-            Mesh mesh = child.GetComponent<Mesh>();
+            Mesh mesh = child.GetComponent<MeshFilter>().sharedMesh;
             string name = child.name;
             moduleDic[name].Add(new Module(name, mesh, 0, false));
 
@@ -105,9 +105,14 @@ public class ModuleLibrary : ScriptableObject
     }
    public List<Module> GetModule(string _name)
     {
+
         List<Module> result = null;
         moduleDic.TryGetValue(_name, out result);
-        if (result == null) throw new Exception("ModuleLibrary::GetModule -> _name can't match");
+        if (result == null)
+        {
+            Debug.Log(_name);
+            throw new Exception("ModuleLibrary::GetModule -> _name can't match");
+        }
         return result;
     }
 }

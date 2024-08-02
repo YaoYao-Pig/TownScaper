@@ -143,11 +143,16 @@ public class CubeQuad
     public CubeVertex[] cubeVertexList = new CubeVertex[8];
 
     public string bits="";
+    public string pre_bits = "";
+    public int y;
 
     public Vector3 centerPosition = Vector3.zero;
+    public Quad quad;
     public CubeQuad(Quad _q,int _y)
     {
         if (_y >= Grid.maxY) throw new System.Exception("CubeQuad::CubeQuad -> _y should less than maxY");
+        quad = _q;
+        y = _y;
         cubeVertexList[0] = _q.a.yVertexList[_y + 1];
         cubeVertexList[1] = _q.b.yVertexList[_y + 1];
         cubeVertexList[2] = _q.c.yVertexList[_y + 1];
@@ -168,6 +173,7 @@ public class CubeQuad
     }
     public static void UpdateBit(CubeQuad _c)
     {
+        _c.pre_bits = _c.bits;
         _c.bits = "";
         for(int i = 0; i < 8; ++i)
         {

@@ -9,6 +9,7 @@ public class Vertex
     public Vector3 currentWorldPosition;
     public Vector3 offset = Vector3.zero;
     public List<CubeVertex> yVertexList = new List<CubeVertex>();
+    public List<Quad> selfQuadList = new List<Quad>();
     public void Relax()
     {
         currentWorldPosition=initeWorldPosition+offset;
@@ -86,17 +87,103 @@ public class Vertex
     {
         return !_a.coord.Equals(_b.coord);
     }
+    public Mesh CreateCursorMesh()
+    {
+        Mesh result=new Mesh();
+        List<Vector3> meshVertecs = new List<Vector3>();
+        List<int> meshIndexs = new List<int>();
+
+        meshVertecs.Add(this.currentWorldPosition);
+        foreach (var sq in selfQuadList)
+        {
+            Vertex pre;
+            Vertex next;
+            GetPreAndNextVertex(sq,this,out pre,out next);
+
+            
+            meshVertecs.Add((pre.currentWorldPosition+ this.currentWorldPosition) /2.0f);
+            meshVertecs.Add(sq.centerVertex.currentWorldPosition);
+            meshVertecs.Add((next.currentWorldPosition+ this.currentWorldPosition) /2.0f);
+
+            meshIndexs.AddRange(new List<int>(){
+                               0,meshVertecs.Count-3,meshVertecs.Count -2,
+                               0,meshVertecs.Count - 2 ,meshVertecs.Count-1});
+        }
+        result.vertices = meshVertecs.ToArray();
+        result.triangles = meshIndexs.ToArray();
+        return result;
+    }
+
+
+    private bool IsEqual(Vertex _a)
+    {
+        if (Vector3.Distance(this.currentWorldPosition, _a.currentWorldPosition) < 0.001f)
+        {
+            return true;
+        }
+        return false;
+    }
+    public void GetPreAndNextVertex(Quad _sq,Vertex _v,out Vertex _pre, out Vertex _next)
+    {
+        _pre = _sq.vertexs[_sq.vertexs.Count - 1];
+        _next = null;
+        int i = 0;
+        foreach (var v in _sq.vertexs)
+        {
+            if (v.IsEqual(_v)) {
+                _next = _sq.vertexs[(i+1)% _sq.vertexs.Count];
+                break;
+            }
+            else
+            {
+                i++;
+                _pre = v;
+            }
+            
+        }
+        //if (_next == null) throw new System.Exception("Vertex::GetPreAndNextVertex");
+    }
+
+    public void GetPreAndNextVertex(Quad _sq, Vertex _v, out Vertex _pre, out Vertex _next,out Vertex _other)
+    {
+        _pre = _sq.vertexs[_sq.vertexs.Count - 1];
+        _next = null;
+        _other = null;
+        int i = 0;
+        foreach (var v in _sq.vertexs)
+        {
+            if (v.IsEqual(_v))
+            {
+                _next = _sq.vertexs[(i + 1) % _sq.vertexs.Count];
+                _other = _sq.vertexs[(i + 2) % _sq.vertexs.Count];
+                break;
+            }
+            else
+            {
+                i++;
+                _pre = v;
+            }
+
+        }
+        //if (_next == null) throw new System.Exception("Vertex::GetPreAndNextVertex");
+    }
 }
 
 public class CubeVertex
 {
     public Vector3 worldPosition;
     public bool isActive;
-    
-    
-    public CubeVertex(Vertex _v,int y)
+    public List<CubeQuad> cubeQuadList = new List<CubeQuad>();
+    public Vertex vertex;
+    public int y;
+
+    public CubeVertex(Vertex _v,int _y)
     {
+        vertex = _v;
         isActive = false;
-        worldPosition = _v.currentWorldPosition + Vector3.up * (Grid.cellSize * y);
+        y = _y;
+        worldPosition = _v.currentWorldPosition + Vector3.up * (Grid.cellSize * _y);
     }
+
+
 }

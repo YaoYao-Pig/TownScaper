@@ -22,13 +22,17 @@ public class Grid
 
     public List<Quad> quadList = new List<Quad>();
 
+
+
+
     public List<Quad> subQuadList = new List<Quad>();
+
     public static List<Edge> subQuadEdgeList = new List<Edge>();
 
     public static List<Vertex> midVertexList = new List<Vertex>();
     public static List<Vertex> centerVertexList = new List<Vertex>();
 
-    public List<CubeVertex> cubeVertexList = new List<CubeVertex>();
+    public static List<CubeVertex> cubeVertexList = new List<CubeVertex>();
     public List<CubeQuad> cubeQuadList = new List<CubeQuad>();
 
     public List<Vertex> subQuadVertexList= new List<Vertex>();
@@ -63,6 +67,16 @@ public class Grid
         GenerateCubeVertex(maxY);
 
         GenerateCube(maxY);
+
+
+
+        foreach(var sq in subQuadList)
+        {
+            foreach(var v in sq.vertexs)
+            {
+                v.selfQuadList.Add(sq);
+            }
+        }
     }
 
     public List<Vertex> GetAllSubQudList()
@@ -269,10 +283,13 @@ public class Grid
                 CubeVertex vc = new CubeVertex(v, i);
                 cubeVertexList.Add(vc);
                 v.yVertexList.Add(vc);
+
             }
         }
     }
 
+
+  
     public void GenerateCube(int _maxY)
     {
         foreach(var sq in subQuadList)

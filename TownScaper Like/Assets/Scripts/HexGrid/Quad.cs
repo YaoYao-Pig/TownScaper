@@ -90,6 +90,7 @@ public class Quad : Shape
         bc = Grid.GetEdge(_b,_c,_es);
         cd = Grid.GetEdge(_c,_d,_es);
         da = Grid.GetEdge(_d,_a, _es);
+
     }
 
     public Quad(HashSet<Vertex> _vs,List<Edge> _es)
@@ -166,11 +167,18 @@ public class CubeQuad
         foreach(var v in cubeVertexList)
         {
             centerPosition += v.worldPosition;
+            v.cubeQuadList.Add(this);
         }
+
 
         centerPosition /= 8;
         
     }
+
+    /// <summary>
+    /// 根据CubeQuad 每一个CubeVertex的Active状态，更新其bit值
+    /// </summary>
+    /// <param name="_c"></param>
     public static void UpdateBit(CubeQuad _c)
     {
         _c.pre_bits = _c.bits;

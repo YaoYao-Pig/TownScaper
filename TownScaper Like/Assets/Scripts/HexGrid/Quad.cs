@@ -181,12 +181,10 @@ public class CubeQuad
 
     public int index;
 
-    public CubeQuad(Quad _q,int _y,List<CubeQuad> _cqs)
+    public CubeQuad(Quad _q,int _y)
     {
         if (_y >= Grid.maxY) throw new System.Exception("CubeQuad::CubeQuad -> _y should less than maxY");
         quad = _q;
-        _cqs.Add(this);
-        index = _cqs.IndexOf(this);
         y = _y;
         cubeVertexList[0] = _q.a.yVertexList[_y + 1];
         cubeVertexList[1] = _q.b.yVertexList[_y + 1];

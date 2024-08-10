@@ -47,6 +47,7 @@ public class WaveFunctionCpllapse : MonoBehaviour
             Slot curSlot = resetSlot[0];
             resetSlot.RemoveAt(0);
             CubeQuad[] neighors = curSlot.cubeQuad.neighbors;
+            Debug.Log(neighors.Length);
             foreach(var cq in neighors)
             {
                 if (cq != null && cq.isActive && !cq.slot.isReset)
@@ -68,7 +69,7 @@ public class WaveFunctionCpllapse : MonoBehaviour
 
         while (curCollapseSlots.Count > 0)
         {
-            while (propagateSlotStack.Count == 0)
+           // while (propagateSlotStack.Count == 0)
             {
                 GetCollapseSlot();
                 Collapse();
@@ -199,8 +200,8 @@ public class WaveFunctionCpllapse : MonoBehaviour
             slot.possibleModule = slot.preModule.Pop();
 
         }
-        propagateSlotStack.Clear();
-        Collapse();
+/*        propagateSlotStack.Clear();
+        Collapse();*/
 
     }
 
@@ -219,7 +220,7 @@ public class WaveFunctionCpllapse : MonoBehaviour
 
     private void UpdateModule()
     {
-        ClearBacktrackStack();
+        //ClearBacktrackStack();
        foreach (var slot in gridManager.slotList)
         {
             slot.UpdateModule(slot.possibleModule[0]);

@@ -39,7 +39,7 @@ public class Grid
 
 
 
-    public List<CubeQuad> cubeQuads = new List<CubeQuad>();
+    //public List<CubeQuad> cubeQuads = new List<CubeQuad>();
 
     public Grid(int _maxRadius,float _cellsize,int _relaxTimes,int _maxY,float _cellHeight)
     {
@@ -261,8 +261,8 @@ public class Grid
             Quad subQuadC = new Quad(t.bc.midVertex, t.b, t.ab.midVertex, t.centerVertex, subQuadEdgeList);
             subQuadA.neighbors[1] = subQuadB;
             subQuadA.neighbors[2] = subQuadC;
-            subQuadB.neighbors[1] = subQuadA;
-            subQuadB.neighbors[2] = subQuadC;
+            subQuadB.neighbors[1] = subQuadC;
+            subQuadB.neighbors[2] = subQuadA;
             subQuadC.neighbors[1] = subQuadA;
             subQuadC.neighbors[2] = subQuadB;
 
@@ -289,8 +289,8 @@ public class Grid
             subQuadB.neighbors[2] = subQuadA;
             subQuadC.neighbors[1] = subQuadD;
             subQuadC.neighbors[2] = subQuadB;
-            subQuadD.neighbors[1] = subQuadC;
-            subQuadD.neighbors[2] = subQuadA;
+            subQuadD.neighbors[1] = subQuadA;
+            subQuadD.neighbors[2] = subQuadC;
 
 
 
@@ -343,8 +343,9 @@ public class Grid
         {
             for(int i = 0; i < _maxY-1; ++i)
             {
-                CubeQuad cq = new CubeQuad(sq, i, cubeQuads);
+                CubeQuad cq = new CubeQuad(sq, i);
                 cubeQuadList.Add(cq);
+                cq.index = cubeQuadList.IndexOf(cq);
                 sq.yQuadList.Add(cq);
             }
         }

@@ -13,7 +13,7 @@ public class Module
 
     public string[] sockets = new string[6];
     public string bit;
-    public static Dictionary<int, int> neighorSocket = new Dictionary<int, int>(){ {0,3}, {1, 2 }, { 2, 1}, { 3, 0}, { 4, 5 }, { 5, 4 } };
+    public static Dictionary<int, int> neighorSocket = new Dictionary<int, int>(){ {1,3}, {0, 2 }, { 2, 0}, { 3,1}, { 4, 5 }, { 5, 4 } };
     public Module(string _name,Mesh _mesh,int _r,bool _flip)
     {
         name=_name; mesh = _mesh;rotation = _r;flip = _flip;

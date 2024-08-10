@@ -9,7 +9,10 @@ public class Vertex
     public Vector3 currentWorldPosition;
     public Vector3 offset = Vector3.zero;
     public List<CubeVertex> yVertexList = new List<CubeVertex>();
+    //subQuadList
     public List<Quad> selfQuadList = new List<Quad>();
+
+
     public void Relax()
     {
         currentWorldPosition=initeWorldPosition+offset;
@@ -115,9 +118,9 @@ public class Vertex
     }
 
 
-    private bool IsEqual(Vertex _a)
+    public bool IsEqual(Vertex _a)
     {
-        if (Vector3.Distance(this.currentWorldPosition, _a.currentWorldPosition) < 0.001f)
+        if (Vector3.Distance(this.currentWorldPosition, _a.currentWorldPosition) <= 0.001f)
         {
             return true;
         }
@@ -167,6 +170,34 @@ public class Vertex
         }
         //if (_next == null) throw new System.Exception("Vertex::GetPreAndNextVertex");
     }
+
+
+
+    public void NeighborSubQuadCheck()
+    {
+        foreach(var subQuad_a in selfQuadList)
+        {
+            foreach(var subQuad_b in selfQuadList)
+            {
+                if (subQuad_a.b.IsEqual(subQuad_b.d))
+                {
+                    subQuad_a.neighbors[0] = subQuad_b;
+                    break;
+                }
+            }
+
+            foreach (var subQuad_b in selfQuadList)
+            {
+                if (subQuad_a.d.IsEqual(subQuad_b.b))
+                {
+                    subQuad_a.neighbors[3] = subQuad_b;
+                    break;
+                }
+            }
+        }
+
+    }
+
 }
 
 public class CubeVertex

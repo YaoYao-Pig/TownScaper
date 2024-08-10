@@ -15,9 +15,14 @@ public class Quad : Shape
     public Edge da;
 
 
+
+
+
+
     private static int globalId = 0;
 
     public List<CubeQuad> yQuadList = new List<CubeQuad>();
+    public Quad[] neighbors = new Quad[4];
 
     private List<Vertex> SortEdge(Vertex _a, Vertex _b, Vertex _c,Vertex _d)
     {
@@ -137,6 +142,26 @@ public class Quad : Shape
         d.offset += (vectorNew_d - d.currentWorldPosition) * 0.1f;
 
     }
+
+    public List<Vertex> GetBothPoint(Quad _b)
+    {
+        List<Vertex> result = new List<Vertex>();
+
+        foreach (var v in vertexs)
+        {
+            foreach(var v_b in _b.vertexs){
+                if (Grid.vertexList.IndexOf(v)== Grid.vertexList.IndexOf(v_b))
+                {
+                    result.Add(v);
+                }
+            }
+        }
+        if (result.Count != 2)
+        {
+            throw new System.Exception("Quad::GetBothPoint -> result.Count!=2");
+        }
+        return result;
+    }
 }
 
 public class CubeQuad
@@ -149,10 +174,19 @@ public class CubeQuad
 
     public Vector3 centerPosition = Vector3.zero;
     public Quad quad;
-    public CubeQuad(Quad _q,int _y)
+
+    public CubeQuad[] neighbors = new CubeQuad[6];
+    public bool isActive = false;
+    public Slot slot;
+
+    public int index;
+
+    public CubeQuad(Quad _q,int _y,List<CubeQuad> _cqs)
     {
         if (_y >= Grid.maxY) throw new System.Exception("CubeQuad::CubeQuad -> _y should less than maxY");
         quad = _q;
+        _cqs.Add(this);
+        index = _cqs.IndexOf(this);
         y = _y;
         cubeVertexList[0] = _q.a.yVertexList[_y + 1];
         cubeVertexList[1] = _q.b.yVertexList[_y + 1];
@@ -191,6 +225,38 @@ public class CubeQuad
                 tmp = '1';
             }
             _c.bits += tmp;
+        }
+
+        if (_c.bits == "00000000") { _c.isActive = false; }
+        else _c.isActive = true;
+    }
+
+
+    public void NeighborCheck()
+    {
+        if (quad.neighbors[0] != null)
+        {
+            neighbors[0] = quad.neighbors[0].yQuadList[y];
+        }
+        if (quad.neighbors[1] != null)
+        {
+            neighbors[1] = quad.neighbors[1].yQuadList[y];
+        }
+        if (quad.neighbors[2] != null)
+        {
+            neighbors[2] = quad.neighbors[2].yQuadList[y];
+        }
+        if (quad.neighbors[3] != null)
+        {
+            neighbors[3] = quad.neighbors[3].yQuadList[y];
+        }
+        if (y < Grid.maxY-2)
+        {
+            neighbors[4] = quad.yQuadList[y + 1];
+        }
+        if (y > 0)
+        {
+            neighbors[5] = quad.yQuadList[y - 1];
         }
     }
 }

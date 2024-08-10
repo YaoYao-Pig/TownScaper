@@ -13,7 +13,7 @@ public class Grid
     public List<Vertex> hexList = new List<Vertex>();
     
     //ËùÓÐµÄvertex
-    public List<Vertex> vertexList = new List<Vertex>();
+    public static List<Vertex> vertexList = new List<Vertex>();
 
     public List<Triangle> triangleList = new List<Triangle>();
 
@@ -36,6 +36,10 @@ public class Grid
     public List<CubeQuad> cubeQuadList = new List<CubeQuad>();
 
     public List<Vertex> subQuadVertexList= new List<Vertex>();
+
+
+
+    public List<CubeQuad> cubeQuads = new List<CubeQuad>();
 
     public Grid(int _maxRadius,float _cellsize,int _relaxTimes,int _maxY,float _cellHeight)
     {
@@ -77,6 +81,22 @@ public class Grid
                 v.selfQuadList.Add(sq);
             }
         }
+
+
+
+        foreach(var v in hexList)
+        {
+            v.NeighborSubQuadCheck();
+        }
+
+        foreach (var sq in subQuadList)
+        {
+            foreach (var cq in sq.yQuadList)
+            {
+                cq.NeighborCheck();
+            }
+        }
+
     }
 
     public List<Vertex> GetAllSubQudList()
@@ -236,9 +256,19 @@ public class Grid
         List<Quad> result = new List<Quad>();
         foreach(var t in triangleList)
         {
-            result.Add(new Quad(t.ab.midVertex, t.a, t.ca.midVertex, t.centerVertex, subQuadEdgeList));
-            result.Add(new Quad(t.ca.midVertex, t.c, t.bc.midVertex, t.centerVertex, subQuadEdgeList));
-            result.Add(new Quad(t.bc.midVertex, t.b, t.ab.midVertex, t.centerVertex, subQuadEdgeList));
+            Quad subQuadA = new Quad(t.ab.midVertex, t.a, t.ca.midVertex, t.centerVertex, subQuadEdgeList);
+            Quad subQuadB = new Quad(t.ca.midVertex, t.c, t.bc.midVertex, t.centerVertex, subQuadEdgeList);
+            Quad subQuadC = new Quad(t.bc.midVertex, t.b, t.ab.midVertex, t.centerVertex, subQuadEdgeList);
+            subQuadA.neighbors[1] = subQuadB;
+            subQuadA.neighbors[2] = subQuadC;
+            subQuadB.neighbors[1] = subQuadA;
+            subQuadB.neighbors[2] = subQuadC;
+            subQuadC.neighbors[1] = subQuadA;
+            subQuadC.neighbors[2] = subQuadB;
+
+            result.Add(subQuadA);
+            result.Add(subQuadB);
+            result.Add(subQuadC);
             
 
         }
@@ -249,10 +279,27 @@ public class Grid
         List<Quad> result = new List<Quad>();
         foreach (var q in quadList)
         {
-            result.Add(new Quad(q.ab.midVertex, q.a, q.da.midVertex, q.centerVertex, subQuadEdgeList));
-            result.Add(new Quad(q.bc.midVertex, q.b, q.ab.midVertex, q.centerVertex, subQuadEdgeList));
-            result.Add(new Quad(q.cd.midVertex, q.c, q.bc.midVertex, q.centerVertex, subQuadEdgeList));
-            result.Add(new Quad(q.da.midVertex, q.d, q.cd.midVertex, q.centerVertex, subQuadEdgeList));
+            Quad subQuadA = new Quad(q.ab.midVertex, q.a, q.da.midVertex, q.centerVertex, subQuadEdgeList);
+            Quad subQuadB=new Quad(q.bc.midVertex, q.b, q.ab.midVertex, q.centerVertex, subQuadEdgeList);
+            Quad subQuadC=new Quad(q.cd.midVertex, q.c, q.bc.midVertex, q.centerVertex, subQuadEdgeList);
+            Quad subQuadD=new Quad(q.da.midVertex, q.d, q.cd.midVertex, q.centerVertex, subQuadEdgeList);
+            subQuadA.neighbors[1] = subQuadB;
+            subQuadA.neighbors[2] = subQuadD;
+            subQuadB.neighbors[1] = subQuadC;
+            subQuadB.neighbors[2] = subQuadA;
+            subQuadC.neighbors[1] = subQuadD;
+            subQuadC.neighbors[2] = subQuadB;
+            subQuadD.neighbors[1] = subQuadC;
+            subQuadD.neighbors[2] = subQuadA;
+
+
+
+
+
+            result.Add(subQuadA);
+            result.Add(subQuadB);
+            result.Add(subQuadC);
+            result.Add(subQuadD);
         }
         return result;
     }
@@ -296,7 +343,7 @@ public class Grid
         {
             for(int i = 0; i < _maxY-1; ++i)
             {
-                CubeQuad cq = new CubeQuad(sq, i);
+                CubeQuad cq = new CubeQuad(sq, i, cubeQuads);
                 cubeQuadList.Add(cq);
                 sq.yQuadList.Add(cq);
             }

@@ -5,17 +5,20 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public List<Module> possibleModule=new List<Module>();
-    public Mesh moduleMesh;
+    [SerializeField] public List<Module> possibleModule=new List<Module>();
     public GameObject module;
     public CubeQuad cubeQuad;
     public Material material;
+
+    public bool isReset=false;
 
     ///GirdManger
     ///---Slot
     ///------GameObject("Module")
     ///---------MeshFilter
     ///---------MeshRenderer
+    ///
+    public Stack<List<Module>> preModule = new Stack<List<Module>>();
     public void Awake()
     {
         module = new GameObject("Module", typeof(MeshFilter), typeof(MeshRenderer));
@@ -28,10 +31,19 @@ public class Slot : MonoBehaviour
     {
 
         cubeQuad = _cq;
-        possibleModule = _ml.GetModule(_cq.bits);
-        material=_m;
+
+        this.cubeQuad.slot = this;
+        ResetSlot(_ml);
+        material =_m;
 
     }
+
+    public void ResetSlot(ModuleLibrary _ml)
+    {
+        possibleModule = _ml.GetModule(cubeQuad.bits).ConvertAll(x=>x);
+        isReset = true;
+    }
+
     private Slot() {; }
     private void RotateModule(Mesh _mesh,int _rotateTimes)
     {
@@ -87,5 +99,11 @@ public class Slot : MonoBehaviour
         module.GetComponent<MeshRenderer>().material = material;
     }
 
+    public void Collapse(int i)
+    {
+        possibleModule = new List<Module>() { possibleModule[i] };
 
+        isReset = false;
+
+    }
 }

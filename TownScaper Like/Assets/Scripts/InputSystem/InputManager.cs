@@ -13,10 +13,16 @@ public class InputManager : MonoBehaviour
 
     public SlotCollider slotCollider;
 
+    private RaycastType raycastType;
+
+    private GameObject slideObject;
+
+    public WaveFunctionCpllapse waveFunctionCpllapse;
+
     private void Awake()
     {
         gridManager = GetComponentInParent<GameManger>().GetComponentInChildren<GridManager>();
-
+        waveFunctionCpllapse = GetComponentInParent<WaveFunctionCpllapse>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Build.Enable();
@@ -29,7 +35,7 @@ public class InputManager : MonoBehaviour
     public void FixedUpdate()
     {
         FindTarget();
-        selectedVertex = targetVertex;
+        //selectedVertex = targetVertex;
         if (targetVertex != null)
         {
             UpdateCursor();
@@ -44,7 +50,7 @@ public class InputManager : MonoBehaviour
 
     public void UpdateCursor()
     {
-        cursor.UpdateCursor(targetVertex);
+        cursor.UpdateCursor(targetVertex, selectedVertex,raycastType, slideObject);
     }
 
 
@@ -52,6 +58,7 @@ public class InputManager : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+        raycastType = RaycastType.NONE;
         if (Physics.Raycast(ray, out hit, maxRayRange, layerMask))
         {
             GroundColliderQuad groundColliderQuad = hit.transform.GetComponent<GroundColliderQuad>();
@@ -60,7 +67,10 @@ public class InputManager : MonoBehaviour
             {
                 selectedVertex = null;
 
+                raycastType = RaycastType.GROUND;
+
                 Vector3 aim = hit.point;
+
                 Quad sq = groundColliderQuad.subQuad;
                 Vector3 a = sq.a.currentWorldPosition;
                 Vector3 b = sq.b.currentWorldPosition;
@@ -98,28 +108,30 @@ public class InputManager : MonoBehaviour
             }
             else
             {
-                SlotCollider slotCollider = hit.transform.GetComponentInParent<Transform>().GetComponentInParent<SlotCollider>();
+                SlotRoot slotRoot = hit.transform.GetComponentInParent<SlotRoot>();
                 //SlotSlideType type = hit.transform.GetComponent<SlotSlideType>();
-                selectedVertex = slotCollider.cubeVertex;
+                selectedVertex = slotRoot.cubeVertex;
                 string type = hit.transform.GetComponent<Transform>().name;
-                CubeVertex cubeVertex = slotCollider.cubeVertex;
                 Debug.Log(type.ToString());
                 if(type == "TOP")
                 {
-                    if (cubeVertex.y < Grid.maxY-1)
+
+                    if (selectedVertex.y < Grid.maxY-1)
                     {
-                        targetVertex = selectedVertex.vertex.yVertexList[cubeVertex.y + 1];
-
-
+                        raycastType = RaycastType.TOP;
+                        targetVertex = selectedVertex.vertex.yVertexList[selectedVertex.y + 1];
                     }
                     else
                     {
                         targetVertex = null;
+                        raycastType = RaycastType.NONE;
                     }
                     
                 }
                 else if (type == "SLIDE0"|| type == "SLIDE1"|| type == "SLIDE2"|| type == "SLIDE3"|| type == "SLIDE4")
                 {
+                    raycastType = RaycastType.SILDE;
+                    slideObject = hit.transform.GetComponent<Transform>().gameObject;
                     targetVertex = hit.transform.GetComponent<SlotSlide>().neighor;
                 }
                 
@@ -136,6 +148,7 @@ public class InputManager : MonoBehaviour
         {
             gridManager.ToggleSlot(targetVertex);
             slotCollider.CreateSlotCollider(targetVertex);
+            waveFunctionCpllapse.WFC();
         }
     }
 
@@ -145,6 +158,7 @@ public class InputManager : MonoBehaviour
         {
             gridManager.ToggleSlot(selectedVertex);
             slotCollider.DestroyCollider(selectedVertex);
+            waveFunctionCpllapse.WFC();
         }
     }
 

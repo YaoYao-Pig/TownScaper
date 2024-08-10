@@ -9,14 +9,19 @@ public class GridManager : MonoBehaviour
     [SerializeField] private float cellSize;
     [SerializeField] private int relaxTimes;
     [SerializeField] private int maxYHeight;
-    [SerializeField] private ModuleLibrary moduleLibrary;
+    [SerializeField] public ModuleLibrary moduleLibrary;
     [SerializeField] private Material moduleMaterial;
     [SerializeField] private float cellHeight;
+
+    public List<Slot> slotList;
     private Grid grid;
+    private GameManger gameManger;
+    public WaveFunctionCpllapse waveFunctionCpllapse;
     void Awake()
     {
         grid = new Grid(maxRadius,cellSize, relaxTimes, maxYHeight, cellHeight);
         moduleLibrary=Instantiate(moduleLibrary);
+        waveFunctionCpllapse = GetComponentInParent<WaveFunctionCpllapse>();
 
     }
     private void Start()
@@ -82,9 +87,11 @@ public class GridManager : MonoBehaviour
                     slotGameObject.transform.localPosition = _cq.centerPosition;
                     Slot slot = slotGameObject.GetComponent<Slot>();
                     slot.Initialized(_cq, moduleLibrary, moduleMaterial);
-
+                    slotList.Add(slot);
                     //¸üÐÂModule
                     slot.UpdateModule(slot.possibleModule[0]);
+                    waveFunctionCpllapse.resetSlot.Add(slot);
+                    waveFunctionCpllapse.curCollapseSlots.Add(slot);
                 }
                 
             }
@@ -93,13 +100,32 @@ public class GridManager : MonoBehaviour
                 Slot slot = slotGameObject.GetComponent<Slot>();
                 if (_cq.bits=="00000000"|| _cq.bits == "11111111")
                 {
+                    slotList.Remove(slot);
+                    if (waveFunctionCpllapse.resetSlot.Contains(slot))
+                    {
+                        waveFunctionCpllapse.resetSlot.Remove(slot);
+                    }
+                    if (waveFunctionCpllapse.curCollapseSlots.Contains(slot))
+                    {
+                        waveFunctionCpllapse.curCollapseSlots.Remove(slot);
+                    }
                     Destroy(slotGameObject);
                     Resources.UnloadUnusedAssets();
                 }
                 else
                 {
-                    slotGameObject.GetComponent<Slot>().possibleModule = moduleLibrary.GetModule(_cq.bits);
-                    slotGameObject.GetComponent<Slot>().UpdateModule(moduleLibrary.GetModule(_cq.bits)[0]);
+                    slotGameObject.GetComponent<Slot>().ResetSlot(moduleLibrary);
+                    slotGameObject.GetComponent<Slot>().UpdateModule(slot.possibleModule[0]);
+
+
+                    if (!waveFunctionCpllapse.resetSlot.Contains(slot))
+                    {
+                        waveFunctionCpllapse.resetSlot.Add(slot);
+                    }
+                    if (!waveFunctionCpllapse.curCollapseSlots.Contains(slot))
+                    {
+                        waveFunctionCpllapse.curCollapseSlots.Add(slot);
+                    }
                 }
 
             }

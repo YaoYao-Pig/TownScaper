@@ -59,9 +59,12 @@
     <Compile Include="Assets\Scripts\InputSystem\PlayerInputActions.cs" />
     <Compile Include="Assets\Scripts\HexGrid\GridManager.cs" />
     <Compile Include="Assets\Scripts\BuildSystem\GroundCollider.cs" />
+    <Compile Include="Assets\Scripts\CameraInput.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Vertex.cs" />
+    <Compile Include="Assets\Scripts\BuildSystem\NeighborDictionary.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Coord.cs" />
     <Compile Include="Assets\Scripts\InputSystem\InputManager.cs" />
+    <Compile Include="Assets\Scripts\BuildSystem\WaveFunctionCpllapse.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Edge.cs" />
     <Compile Include="Assets\Scripts\Module\ModuleLibrary.cs" />
     <Compile Include="Assets\Scripts\Module\Slot.cs" />
@@ -70,10 +73,11 @@
     <Compile Include="Assets\Scripts\GameManger.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Triangle.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Grid.cs" />
+    <Compile Include="Assets\Scripts\BuildSystem\SlotCollider.cs" />
+    <Compile Include="Assets\Scripts\BuildSystem\Cursor.cs" />
+    <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Module\Module.cs" />
     <Compile Include="Assets\Scripts\HexGrid\Quad.cs" />
-    <Compile Include="Assets\Scripts\BuildSystem\Cursor.cs" />
-    <Compile Include="Assets\Scripts\BuildSystem\SlotCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

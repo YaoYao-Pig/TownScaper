@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 12727523}
   - component: {fileID: 12727522}
+  - component: {fileID: 12727524}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -171,6 +172,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &12727524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12727521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfa31a9a90e19046a46fe9aeef74bbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetSlot: []
+  curCollapseSlots: []
 --- !u!1 &573725365
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,6 +427,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -485,6 +501,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 111.078, y: 211.995, z: 214.517}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160a97a6759d64d458b69a64f4fc7a45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraSpeed: 0
 --- !u!1 &1227931380
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,6 +560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursor: {fileID: 1996527406}
   slotCollider: {fileID: 901078895}
+  waveFunctionCpllapse: {fileID: 0}
   maxRayRange: 100
   layerMask:
     serializedVersion: 2
@@ -667,6 +697,8 @@ MonoBehaviour:
   moduleLibrary: {fileID: 11400000, guid: 5f1b6fd74875a9d479e9c8503481da48, type: 2}
   moduleMaterial: {fileID: 2100000, guid: 6936f5502618b7847b501b77a679a300, type: 2}
   cellHeight: 5
+  slotList: []
+  waveFunctionCpllapse: {fileID: 0}
 --- !u!4 &2100318556
 Transform:
   m_ObjectHideFlags: 0

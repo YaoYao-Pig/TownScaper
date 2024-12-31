@@ -186,6 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resetSlot: []
   curCollapseSlots: []
+  currentPropagateSlot: {fileID: 0}
 --- !u!1 &573725365
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,7 +693,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRadius: 5
   cellSize: 5
-  relaxTimes: 0
+  relaxTimes: 5
   maxYHeight: 5
   moduleLibrary: {fileID: 11400000, guid: 5f1b6fd74875a9d479e9c8503481da48, type: 2}
   moduleMaterial: {fileID: 2100000, guid: 6936f5502618b7847b501b77a679a300, type: 2}

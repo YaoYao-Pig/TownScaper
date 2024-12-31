@@ -40,3 +40,6 @@ public class GroundColliderQuad : MonoBehaviour
 {
     public Quad subQuad;
 }
+
+
+
